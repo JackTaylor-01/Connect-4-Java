@@ -1,5 +1,10 @@
+import java.io.IOException;
 import java.util.Scanner;
-
+import java.util.logging.Logger;
+import java.util.logging.Level;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.FileHandler;
+import java.util.logging.SimpleFormatter;
 public class Connect4 {
     private GameGrid gameGrid;
     private Player player1;
@@ -7,16 +12,20 @@ public class Connect4 {
     private Player currentPlayer;
     private int winningLength;
 
+    private static final Logger LOG = Logger.getLogger(Connect4.class.getName());
+
     public Connect4(int rows, int columns, int winningLength) {
         this.gameGrid = new GameGrid(rows, columns);
         this.player1 = new Player("Player 1", "R");
         this.player2 = new Player("Player 2", "Y");
         this.currentPlayer = player1;
         this.winningLength = winningLength;
+        setupLogger();
     }
 
     public void playGame() {
         boolean gameWon = false;
+        LOG.info("Game started");
         while (!gameWon) {
             gameGrid.displayGrid();
             System.out.println(currentPlayer.getName() + " (" + currentPlayer.getColour() + "), choose a column: ");
@@ -25,11 +34,13 @@ public class Connect4 {
                 if (checkForWin()) {
                     gameWon = true;
                     gameGrid.displayGrid();
+                    LOG.info(currentPlayer.getName() + " won");
                     System.out.println(currentPlayer.getName() + " wins!");
                 } else {
                     currentPlayer = Player.switchPlayer(currentPlayer, player1, player2);
                 }
             } else {
+                LOG.warning(currentPlayer.getName() + " tried placing token in a full column: " + column);
                 System.out.println("Column full! Choose another column.");
             }
         }
@@ -40,6 +51,7 @@ public class Connect4 {
         Scanner sc = new Scanner(System.in);
         int col =  sc.nextInt() - 1;
         if(col < 0 || col >= gameGrid.getGrid()[0].length){
+            LOG.warning(currentPlayer.getName() + " chose invalid column: " + Integer.toString(col));
             System.out.println("Invalid column, please try again");
             return getInputColumn();
         }
@@ -107,5 +119,28 @@ public class Connect4 {
             }
         }
         return true;
+    }
+
+    private static void setupLogger() {
+        try {
+            // Create a FileHandler to log to a file
+            FileHandler fileHandler = new FileHandler("connect4.log", true);
+            fileHandler.setFormatter(new SimpleFormatter());
+
+            // Create a ConsoleHandler to log to console
+            ConsoleHandler consoleHandler = new ConsoleHandler();
+
+            // Add handlers to the logger
+            LOG.addHandler(consoleHandler);
+            LOG.addHandler(fileHandler);
+
+            // Set log levels
+            LOG.setLevel(Level.ALL);
+            fileHandler.setLevel(Level.ALL);
+            consoleHandler.setLevel(Level.ALL);
+
+        } catch (IOException e) {
+            LOG.log(Level.SEVERE, "Failed to set up logger", e);
+        }
     }
 }
