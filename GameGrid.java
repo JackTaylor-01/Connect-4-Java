@@ -18,6 +18,16 @@ public class GameGrid {
         }
     }
 
+    public boolean addToken(int column, String colour) {
+        for (int i = rows - 1; i >= 0; i--) {
+            if (grid[i][column].equals(".")) {
+                grid[i][column] = colour;
+                return true;
+            }
+        }
+        return false; // Column is full
+    }
+
     public void displayGrid() {
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j++) {
