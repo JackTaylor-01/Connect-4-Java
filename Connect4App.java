@@ -5,6 +5,9 @@ public class Connect4App {
         System.out.println(player.getColour());
         System.out.println(player.getName());
 
+        GameGrid grid = new GameGrid(10, 10);
+        grid.displayGrid();
+
     }
     
 }
