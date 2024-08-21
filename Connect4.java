@@ -37,7 +37,7 @@ public class Connect4 {
                     LOG.info(currentPlayer.getName() + " won");
                     System.out.println(currentPlayer.getName() + " wins!");
                 } else {
-                    currentPlayer = Player.switchPlayer(currentPlayer, player1, player2);
+                    switchPlayer();
                 }
             } else {
                 LOG.warning(currentPlayer.getName() + " tried placing token in a full column: " + column);
@@ -59,7 +59,7 @@ public class Connect4 {
 
     }
 
-    private boolean checkForWin() {
+    public boolean checkForWin() {
         return checkHorizontalWin() || checkVerticalWin() || checkDiagonalWin();
     }
 
@@ -119,6 +119,22 @@ public class Connect4 {
             }
         }
         return true;
+    }
+
+    public GameGrid getGameGrid(){
+        return gameGrid;
+    }
+
+    public int getWinningLength(){
+        return winningLength;
+    }
+
+    public Player getCurrentPlayer(){
+        return currentPlayer;
+    }
+
+    public void switchPlayer(){
+        currentPlayer = Player.switchPlayer(currentPlayer, player1, player2);
     }
 
     private static void setupLogger() {

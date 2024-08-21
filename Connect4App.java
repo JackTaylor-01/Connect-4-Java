@@ -14,8 +14,7 @@ public class Connect4App {
         System.out.println("Please enter winning length: ");
         winningLength = sc.nextInt();
 
-        Connect4 game = new Connect4(rows, columns, winningLength);
-        game.playGame();
+        new Connect4GUI(rows, columns, winningLength);
     }
     
 }
