@@ -38,7 +38,12 @@ public class Connect4 {
     private int getInputColumn() {
         // Placeholder for input method
         Scanner sc = new Scanner(System.in);
-        return sc.nextInt() - 1;
+        int col =  sc.nextInt() - 1;
+        if(col < 0 || col >= gameGrid.getGrid()[0].length){
+            System.out.println("Invalid column, please try again");
+            return getInputColumn();
+        }
+        return col;
 
     }
 
